@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
+  masonry_grid: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -21,8 +22,13 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
   assets:
     - assets/melon.png
     - assets/red-onion.png
     - assets/sourdough.png
+    - assets/ai.png
+    - assets/beyonce.png
+    - assets/internet.png
+    - assets/nannies.png
+    - assets/squid.png
+    - assets/dots.png

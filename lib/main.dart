@@ -24,82 +24,82 @@ void main() {
 // less than the margins, the margins should get smaller (until they are 0).
 
 class ResponsiveBody extends StatelessWidget {
-  const ResponsiveBody({ Key? key, this.child }) : super(key: key);
+  const ResponsiveBody({Key? key, this.child}) : super(key: key);
 
   final Widget? child;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final Breakpoint breakpoint = BreakpointLayout.breakpointFor(context);
-        final bool navRailShowing = AdaptiveScaffold.featuresFor(context).contains(AdaptiveScaffoldFeature.navigationRail);
-        final double width = constraints.maxWidth;
+        builder: (BuildContext context, BoxConstraints constraints) {
+      final Breakpoint breakpoint = BreakpointLayout.breakpointFor(context);
+      final bool navRailShowing = AdaptiveScaffold.featuresFor(context)
+          .contains(AdaptiveScaffoldFeature.navigationRail);
+      final double width = constraints.maxWidth;
 
-        final double startMargin;
-        final double endMargin;
-        if (navRailShowing) {
-          // I think it would be nicer to have written this as:
-          // if (breakpoint.isDesktop) ...
-          switch (breakpoint) {
-            case DesktopSmallBreakpoint():
-            case DesktopLargeBreakpoint():
-              if (width < 192) {
-                // Split the available space evenly for the margins.
-                startMargin = math.max(0, (width - 96) / 2);
-                endMargin = startMargin;
-              } else if (width < (840 + 48 + 48)) {
-                // Fixed margins with responsive body.
-                startMargin = 48;
-                endMargin = 48;
-              } else if (width < (840 + 48 + 200)) {
-                // Body fixed to 840, with a static 48 starting margin with the
-                // rest put in the end margin.
-                startMargin = 48;
-                endMargin = width - 840 - startMargin;
-              } else {
-                // Fixed margins with responsive body.
-                startMargin = 48;
-                endMargin = 200;
-              }
-              break;
-            default:
-              startMargin = 0;
-              endMargin = 0;
-              break;
-          }
-        } else {
-          // I think it would be nicer to have written this as:
-          // if (breakpoint.isDesktop) ...
-          switch (breakpoint) {
-            case DesktopSmallBreakpoint():
-            case DesktopLargeBreakpoint():
-              if (width < 192) {
-                startMargin = math.max(0, (width - 96) / 2);
-              } else if (width < 840) {
-                startMargin = 48;
-              } else if (width < 840 + 2 * 48) {
-                startMargin = 48;
-              } else if (width < 1240) {
-                startMargin = (width - 840) / 2;
-              } else {
-                startMargin = 200;
-              }
-              break;
-            default:
-              startMargin = 0;
-              break;
-          }
-          endMargin = startMargin;
+      final double startMargin;
+      final double endMargin;
+      if (navRailShowing) {
+        // I think it would be nicer to have written this as:
+        // if (breakpoint.isDesktop) ...
+        switch (breakpoint) {
+          case DesktopSmallBreakpoint():
+          case DesktopLargeBreakpoint():
+            if (width < 192) {
+              // Split the available space evenly for the margins.
+              startMargin = math.max(0, (width - 96) / 2);
+              endMargin = startMargin;
+            } else if (width < (840 + 48 + 48)) {
+              // Fixed margins with responsive body.
+              startMargin = 48;
+              endMargin = 48;
+            } else if (width < (840 + 48 + 200)) {
+              // Body fixed to 840, with a static 48 starting margin with the
+              // rest put in the end margin.
+              startMargin = 48;
+              endMargin = width - 840 - startMargin;
+            } else {
+              // Fixed margins with responsive body.
+              startMargin = 48;
+              endMargin = 200;
+            }
+            break;
+          default:
+            startMargin = 0;
+            endMargin = 0;
+            break;
         }
-
-        return Padding(
-          // TODO(darrenaustin): handle RTL direction
-          padding: EdgeInsets.only(left: startMargin, right: endMargin),
-          child: child,
-        );
+      } else {
+        // I think it would be nicer to have written this as:
+        // if (breakpoint.isDesktop) ...
+        switch (breakpoint) {
+          case DesktopSmallBreakpoint():
+          case DesktopLargeBreakpoint():
+            if (width < 192) {
+              startMargin = math.max(0, (width - 96) / 2);
+            } else if (width < 840) {
+              startMargin = 48;
+            } else if (width < 840 + 2 * 48) {
+              startMargin = 48;
+            } else if (width < 1240) {
+              startMargin = (width - 840) / 2;
+            } else {
+              startMargin = 200;
+            }
+            break;
+          default:
+            startMargin = 0;
+            break;
+        }
+        endMargin = startMargin;
       }
-    );
+
+      return Padding(
+        // TODO(darrenaustin): handle RTL direction
+        padding: EdgeInsets.only(left: 10, right: 10),
+        child: child,
+      );
+    });
   }
 }
 
@@ -109,11 +109,11 @@ class NoPageTransitionsBuilder extends PageTransitionsBuilder {
 
   @override
   Widget buildTransitions<T>(
-      PageRoute<T>? route,
-      BuildContext? context,
-      Animation<double> animation,
-      Animation<double>? secondaryAnimation,
-      Widget child,
+    PageRoute<T>? route,
+    BuildContext? context,
+    Animation<double> animation,
+    Animation<double>? secondaryAnimation,
+    Widget child,
   ) {
     return child;
   }
@@ -126,7 +126,7 @@ class AdaptiveApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const colorScheme = ColorScheme.light();
     final theme = ThemeData(
-      colorSchemeSeed: const Color(0xff460bec),
+      scaffoldBackgroundColor: const Color.fromRGBO(242, 231, 248, 1),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: <TargetPlatform, PageTransitionsBuilder>{
           TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
@@ -141,7 +141,8 @@ class AdaptiveApp extends StatelessWidget {
         title: 'Adaptive Layout Demo',
         theme: theme,
         routes: {
-          'Featured': (BuildContext context) => const ContentPage(title: 'Featured', content: FeaturedItems()),
+          'Featured': (BuildContext context) =>
+              const ContentPage(title: 'Featured', content: FeaturedItems()),
           'Chat': (BuildContext context) => const ExamplePage(title: 'Chat'),
           'Rooms': (BuildContext context) => const ExamplePage(title: 'Rooms'),
           'Meet': (BuildContext context) => const ExamplePage(title: 'Meet'),
@@ -173,30 +174,29 @@ class ExamplePage extends StatelessWidget {
     return ContentPage(
       title: title,
       content: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          final Size windowSize = MediaQuery.of(context).size;
-          final double bodyWidth = constraints.biggest.width;
-          return Container(
-            // color: Colors.grey[300],
-            decoration: BoxDecoration(
-              color: Colors.grey[300], // white,
-              border: Border.all(
-                color: Colors.black,
-                width: 1,
-              ),
+          builder: (BuildContext context, BoxConstraints constraints) {
+        final Size windowSize = MediaQuery.of(context).size;
+        final double bodyWidth = constraints.biggest.width;
+        return Container(
+          // color: Colors.grey[300],
+          decoration: BoxDecoration(
+            color: Colors.grey[300], // white,
+            border: Border.all(
+              color: Colors.black,
+              width: 1,
             ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text('Window: ${windowSize.width.toInt()}'),
-                  Text('Body: ${bodyWidth.toInt()}'),
-                ],
-              ),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('Window: ${windowSize.width.toInt()}'),
+                Text('Body: ${bodyWidth.toInt()}'),
+              ],
             ),
-          );
-        }
-      ),
+          ),
+        );
+      }),
     );
   }
 }
